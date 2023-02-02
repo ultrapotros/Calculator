@@ -27,7 +27,7 @@ function operator(sign) {
     console.log(sign);
     console.log(display[display.length-1])
     console.log(currentNumber)
-    if (currentNumber !== '0') {
+    /* if (currentNumber !== '0') { */
         previousNumber = parseFloat(currentNumber);
         if (parcial !== 0) {
             parcial = simpleOperation(parcial,parseFloat(currentNumber),lastOperator);
@@ -39,7 +39,7 @@ function operator(sign) {
         currentNumber = '0'
         display = parcial.toString()+sign ;
         updateScreens()
-    }
+   /*  } */
 }
 function decimal() {
     if (!currentNumber.includes('.')) {
@@ -48,13 +48,15 @@ function decimal() {
     console.log(parseFloat(currentNumber))
 }
 function sign() {
-    if (!currentNumber.includes('-')) {
-        currentNumber = `-${currentNumber}`
-    } else {
-        currentNumber = currentNumber.substring(1,currentNumber.length)
+    if (currentNumber !== '0') {
+        if (!currentNumber.includes('-')) {
+            currentNumber = `-${currentNumber}`
+        } else {
+            currentNumber = currentNumber.substring(1,currentNumber.length)
+        }
+        updateScreens();
     }
-    updateScreens();
-    console.log(parseFloat(currentNumber))
+
 }
 function clear() {
     currentNumber = '0';
@@ -70,15 +72,20 @@ function equal() {
     updateScreens(total);
 }
 function simpleOperation(num1,num2,operator) {
+    console.log(num1,num2,operator);
     switch (operator) {
         case '+': 
             currentNumber = '0';
             previousNumber = '0';
             return parseFloat(num1)+parseFloat(num2);
         case '/': 
+            if (num1 === 0 && num2 ==='0') {/**remember to think about this */
+                console.log('en bug')
+                return 'someone has drunk too much!!'
+            }
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1)/parseFloatt(num2);
+            return parseFloat(num1)/parseFloat(num2);
         case '*': 
             currentNumber = '0';
             previousNumber = '0';
