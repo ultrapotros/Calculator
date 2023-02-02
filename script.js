@@ -13,7 +13,7 @@ const playOptions = document.querySelectorAll('.options-container>div')
 const computerOptions = document.querySelectorAll(`.computer-options>div`);
 const startGame = ()=> playOptions.forEach(div=>div.addEventListener('click',userOption));
 let display="0";
-let previousNumber= '0';
+let previousNumber= 0;
 let currentNumber= '0';
 let lastOperator='';
 let parcial = 0;
@@ -21,12 +21,14 @@ let total = 0;
 function updateScreens(result) {
     smallScreen.textContent = display;
     bigScreen.textContent = result || currentNumber;
+    /* bigScreen.textContent = result? result: currentNumber; */
 }
 function operator(sign) {
     console.log(sign);
     console.log(display[display.length-1])
     console.log(currentNumber)
     if (currentNumber !== '0') {
+        previousNumber = parseFloat(currentNumber);
         if (parcial !== 0) {
             parcial = simpleOperation(parcial,parseFloat(currentNumber),lastOperator);
             console.log(parcial)
@@ -41,7 +43,6 @@ function operator(sign) {
 }
 function decimal() {
     if (!currentNumber.includes('.')) {
-        /* display += '.'; */
         currentNumber += '.'
     }
     console.log(parseFloat(currentNumber))
@@ -89,8 +90,14 @@ function simpleOperation(num1,num2,operator) {
     }
 }
 function percentage(previousNumber,currentNumber) {
+    console.log(previousNumber)
+    console.log(currentNumber)
+    /* currentNumber = simpleOperation(previousNumber,(previousNumber*currentNumber/100),lastOperator); */
+    currentNumber = parseFloat(previousNumber)*parseFloat(currentNumber)/100;
+    display += (currentNumber);
+    updateScreens();
     console.log(previousNumber*currentNumber/100) ;
-    return previousNumber*currentNumber/100;
+    /* return previousNumber*currentNumber/100; */
 }
 
 function nums(num) {
