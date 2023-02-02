@@ -1,7 +1,10 @@
 const numberButtons = document.querySelectorAll('.operand');
 const operatorButtons = document.querySelectorAll('.operator');
 const displayContent = document.querySelector('#display');
-const equal = document.querySelector('.equals');
+const equalKey = document.querySelector('.equals');
+const decimalKey = document.querySelector('.decimal');
+const clearKey = document.querySelector('.clear');
+const signKey = document.querySelector('.sign');
 const smallScreen = document.querySelector('#small-screen');
 const bigScreen = document.querySelector('#big-screen');
 const popInst = document.querySelector('#pop-inst');
@@ -9,39 +12,80 @@ const percent = document.querySelector('.percent');
 const playOptions = document.querySelectorAll('.options-container>div')
 const computerOptions = document.querySelectorAll(`.computer-options>div`);
 const startGame = ()=> playOptions.forEach(div=>div.addEventListener('click',userOption));
-let display="";
+let display="0";
 let previousNumber= '0';
 let currentNumber= '0';
-let lastOperator;
-function updateScreens() {
-    smallScreen.textContent = previousNumber;
-    bigScreen.textContent = currentNumber;
+let lastOperator='';
+let parcial = 0;
+let total = 0;
+function updateScreens(result) {
+    smallScreen.textContent = display;
+    bigScreen.textContent = result || currentNumber;
 }
 function operator(sign) {
-    previousNumber = currentNumber;
-    currentNumber = '0';
-    updateScreens();
-    if (sign === lastOperator) {
-
-    } else {
+    console.log(sign);
+    console.log(display[display.length-1])
+    console.log(currentNumber)
+    if (currentNumber !== '0') {
+        if (parcial !== 0) {
+            parcial = simpleOperation(parcial,parseFloat(currentNumber),lastOperator);
+            console.log(parcial)
+        } else{
+            parcial = parseFloat(currentNumber);
+        }
         lastOperator = sign;
+        currentNumber = '0'
+        display = parcial.toString()+sign ;
+        updateScreens()
     }
+}
+function decimal() {
+    if (!currentNumber.includes('.')) {
+        /* display += '.'; */
+        currentNumber += '.'
+    }
+    console.log(parseFloat(currentNumber))
+}
+function sign() {
+    if (!currentNumber.includes('-')) {
+        currentNumber = `-${currentNumber}`
+    } else {
+        currentNumber = currentNumber.substring(1,currentNumber.length)
+    }
+    updateScreens();
+    console.log(parseFloat(currentNumber))
+}
+function clear() {
+    currentNumber = '0';
+    previousNumber = '0';
+    display = '0';
+    updateScreens();
+}
+function equal() {
+    total = simpleOperation(parcial,currentNumber,lastOperator);
+    parcial = 0;
+    display = '0';
+    currentNumber = '0';
+    updateScreens(total);
 }
 function simpleOperation(num1,num2,operator) {
     switch (operator) {
         case '+': 
-            console.log(num1)
-            console.log(num2)
-            console.log(parseInt(num1)+parseInt(num2))
             currentNumber = '0';
             previousNumber = '0';
-            return parseInt(num1)+parseInt(num2);
+            return parseFloat(num1)+parseFloat(num2);
         case '/': 
-            return num1/num2;
+            currentNumber = '0';
+            previousNumber = '0';
+            return parseFloat(num1)/parseFloatt(num2);
         case '*': 
-            return num1*num2;
+            currentNumber = '0';
+            previousNumber = '0';
+            return parseFloat(num1)*parseFloat(num2);
         case '-': 
-            return num1-num2;
+            currentNumber = '0';
+            previousNumber = '0';
+            return parseFloat(num1)-parseFloat(num2);
     }
 }
 function percentage(previousNumber,currentNumber) {
@@ -55,13 +99,15 @@ function nums(num) {
     } else {
         currentNumber += num;
     }
-    display += num.toString();
-    bigScreen.textContent = display;
+    /* bigScreen.textContent = display; */
     /* displayContent.removeChild('p') */
-    smallScreen.textContent = currentNumber;
+    bigScreen.textContent = currentNumber;
 
 }
 percent.addEventListener('click', () => percentage(previousNumber,currentNumber));
-equal.addEventListener('click', () => simpleOperation(previousNumber,currentNumber,lastOperator));
+equalKey.addEventListener('click', equal);
+decimalKey.addEventListener('click', decimal);
+signKey.addEventListener('click', sign);
+clearKey.addEventListener('click', clear);
 numberButtons.forEach(button=>button.addEventListener('click', () => nums(button.value)));
 operatorButtons.forEach(button=>button.addEventListener('click', () => operator(button.value)));
