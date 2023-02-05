@@ -25,13 +25,14 @@ body {
 
 #display {
     color: #0a1e23;
-    width: max(300px, 260px);
+    /* width: clamp(220px, 10vw, 500px); */
+    
     height: 50px;
     border: 2px solid rgb(0, 0, 0, .4);
     margin: auto;
     height: 8rem;
     /* width: auto; */
-    width: 270px;
+    /* width: 270px; */
     font-size: 30px;
     margin-bottom: 20px;
     padding: .5rem;
@@ -40,19 +41,21 @@ body {
     border-radius: 5px;
 }
 
-#display div {
+/* #display div {
     width: 100%;
-}
+} */
 
 #small-screen {
     color: rgb(0, 0, 0, .4);
     font-size: 1.2rem;
+    font-size: clamp(.8rem, 3vw, 1.4rem);
+    max-width: 85%;
 }
 
 #big-screen {
-    font-size: clamp(1.8rem, 20vw, 2.5rem);
+    font-size: clamp(1.4rem, 15vw, 2rem);
     /* font-size: 2rem; */
-    max-width: 100%;
+    max-width: 85%;
     columns: 150px;
     overflow-wrap: anywhere;
 }
@@ -93,8 +96,9 @@ a {
 }
  */
 button {
-    height: 60px;
-    width: 60px;
+    /* height: 60px; */
+    width: min(60px, 15vw);
+    aspect-ratio: 1 / 1;
     border: 0;
     border-radius: 30px;
     margin: 5px;

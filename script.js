@@ -21,7 +21,7 @@ let parcial = 0;
 let total = 0;
 let maxDigits;
 function updateScreens(result) {
-    maxDigits = 11;
+    /* maxDigits = 11; */
     smallScreen.textContent = display;
     bigScreen.textContent = result || currentNumber;
     console.log(currentNumber)
