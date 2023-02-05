@@ -105,7 +105,18 @@ function simpleOperation(num1, num2, operator) {
             return parseFloat(num1) - parseFloat(num2);
     }
 }
-function percentage(baseNum, percentage) {
+function percentage() {
+    let baseNum = parcial !== 0? parcial : previousNumber;
+    let percent = parseFloat(baseNum) * parseFloat(currentNumber) / 100;
+    console.log(percent)
+    currentNumber = percent.toString();
+    display += currentNumber;
+    currentNumber = 0;
+    parcial += percent;
+    result = percent;
+    updateScreens(percent);
+}
+/* function percentage(baseNum, percentage) {
     let percent = parseFloat(baseNum) * parseFloat(percentage) / 100;
     console.log(percent)
     currentNumber = percent.toString();
@@ -114,7 +125,7 @@ function percentage(baseNum, percentage) {
     parcial += percent;
     resultado = parcial;
     updateScreens();
-}
+} */
 
 function nums(num) {
     if (currentNumber === '0') {
@@ -132,7 +143,8 @@ function nums(num) {
     bigScreen.textContent = currentNumber;
 }
 
-percent.addEventListener('click', () => percentage(previousNumber, currentNumber));
+/* percent.addEventListener('click', () => percentage(previousNumber, currentNumber)); */
+percent.addEventListener('click', () => percentage());
 equalKey.addEventListener('click', equal);
 decimalKey.addEventListener('click', decimal);
 signKey.addEventListener('click', sign);
