@@ -88,9 +88,8 @@ function simpleOperation(num1, num2, operator) {
             previousNumber = '0';
             return parseFloat(num1) + parseFloat(num2);
         case '/':
-            if (num1 === 0 && num2 === '0') {/**remember to think about this */
-                console.log('en bug')
-                return 'someone has drunk too much!!'
+            if (num1 === 0 && num2 === '0') {
+                return 'someone drank too much!'
             }
             currentNumber = '0';
             previousNumber = '0';
