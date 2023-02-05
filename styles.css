@@ -127,7 +127,7 @@ button#equal {
     color: #000000;
 }
 
-.operator, .decimal {
+.operator, .decimal, .sign{
     background-color: #ffd0fb;
     color: #f967f3;
 }

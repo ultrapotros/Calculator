@@ -21,8 +21,12 @@ let parcial = 0;
 let total = 0;
 let maxDigits;
 function updateScreens(result) {
+    maxDigits = 11;
     smallScreen.textContent = display;
     bigScreen.textContent = result || currentNumber;
+    console.log(currentNumber)
+    console.log(previousNumber)
+    console.log(parcial)
 }
 function operator(sign) {
     console.log(sign);
@@ -62,6 +66,7 @@ function sign() {
 function clear() {
     currentNumber = '0';
     previousNumber = '0';
+    parcial = 0;
     display = '0';
     updateScreens();
 }
@@ -77,7 +82,6 @@ function equal() {
     updateScreens(total);
 }
 function simpleOperation(num1, num2, operator) {
-    console.log(num1, num2, operator);
     switch (operator) {
         case '+':
             currentNumber = '0';
@@ -101,9 +105,14 @@ function simpleOperation(num1, num2, operator) {
             return parseFloat(num1) - parseFloat(num2);
     }
 }
-function percentage(previousNumber, currentNumber) {
-    currentNumber = parseFloat(previousNumber) * parseFloat(currentNumber) / 100;
-    display += (currentNumber);
+function percentage(baseNum, percentage) {
+    let percent = parseFloat(baseNum) * parseFloat(percentage) / 100;
+    console.log(percent)
+    currentNumber = percent.toString();
+    display += currentNumber;
+    currentNumber = 0;
+    parcial += percent;
+    resultado = parcial;
     updateScreens();
 }
 
