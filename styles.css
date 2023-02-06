@@ -1,0 +1,145 @@
+html {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+:root {
+    --screen-background: white;
+    --background-color: rgb(255, 255, 249);
+    --numbers-background: #c3eaff;
+    --operators-background: #ffd0fb;
+    --deletes-background: #ffd5d8;
+    --equal-background: #adf9e7;
+    --color: #000000;
+    --light-color: rgb(0, 0, 0, .4);
+    --operators-color: #f967f3;
+    --deletes-color: #fc4552;
+    --equal-color: #F9FAF8;
+    --shadow: #000;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+#container {
+    height: 100vh;
+    width: 90vw;
+    display: grid;
+    place-items: center;
+}
+
+#display {
+    color: var(--color);
+    background-color: var(--screen-background);
+    border: 2px solid var(--light-color);
+    margin: auto;
+    height: 8rem;
+    margin-bottom: 20px;
+    padding: .5rem;
+    display: grid;
+    align-content: space-between;
+    border-radius: 5px;
+}
+
+#small-screen {
+    color: var(--light-color);
+    font-size: clamp(.8rem, 3vw, 1.4rem);
+    max-width: 85%;
+}
+
+#big-screen {
+    font-size: clamp(1.4rem, 15vw, 2rem);
+    max-width: 85%;
+    columns: 150px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    outline: 0;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.calculator {
+    position: relative;
+    height: auto;
+    width: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px var(--shadow);
+}
+
+#buttons {
+    display: grid;
+    place-content: center;
+}
+
+button {
+    width: min(60px, 15vw);
+    aspect-ratio: 1 / 1;
+    border: 0;
+    border-radius: 30px;
+    margin: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+button:hover {
+    transform: scale(1.07);
+}
+
+.calculator {
+    background-color: var(--background-color);
+}
+
+#clear,
+#partialClear {
+    background-color: var(--deletes-background);
+    color: var(--deletes-color);
+}
+
+.number {
+    background-color: var(--numbers-background);
+    color: var(--color);
+}
+
+.operator,
+.decimal,
+.sign,
+.percent {
+    background-color: var(--operators-background);
+    color: var(--operators-color);
+}
+
+.equals {
+    background-color: var(--equal-background);
+    color: var(--color);
+}
+
+@media (prefers-color-scheme:dark) {
+    :root {
+        --screen-background: #333333;
+        --background-color: #0E0E0E;
+        --numbers-background: #352E3C;
+        --operators-background: #E8A1AE;
+        --deletes-background: #fc4552;
+        --equal-background: #adf9e7;
+        --color: #FFFFFF;
+        --light-color: rgb(223, 223, 223, .5);
+        --operators-color: #F9FAF8;
+        --deletes-color: #F9FAF8;
+        --equal-color: #F9FAF8;
+        --shadow: rgb(195, 178, 178);
+    }
+}
