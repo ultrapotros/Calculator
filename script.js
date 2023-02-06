@@ -5,7 +5,7 @@ const decimalKey = document.querySelector('.decimal');
 const clearKey = document.querySelector('#clear');
 const partialClearKey = document.querySelector('#partialClear');
 const signKey = document.querySelector('.sign');
-const smallScreen = document.querySelector('#small-screen');
+const smallScreen = document.querySelector('#small-screen')
 const bigScreen = document.querySelector('#big-screen');
 const percent = document.querySelector('.percent');
 
@@ -92,7 +92,7 @@ function simpleOperation(num1, num2, operator) {
             let eliminateExtraZeros = (parseFloat(num1) / parseFloat(num2)).toFixed(6).toString();
             for (let i = eliminateExtraZeros.length - 1; i > 2; i--) {
                 if (eliminateExtraZeros[i] === '0' ) {
-                    eliminateExtraZeros = eliminateExtraZeros.slice(0, aux.length-1)
+                    eliminateExtraZeros = eliminateExtraZeros.slice(0, eliminateExtraZeros.length-1)
                 } else {
                     i = 0
                 }
