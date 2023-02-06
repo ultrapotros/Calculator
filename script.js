@@ -1,6 +1,5 @@
 const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
-const displayContent = document.querySelector('#display');
 const equalKey = document.querySelector('.equals');
 const decimalKey = document.querySelector('.decimal');
 const clearKey = document.querySelector('#clear');
@@ -8,11 +7,8 @@ const partialClearKey = document.querySelector('#partialClear');
 const signKey = document.querySelector('.sign');
 const smallScreen = document.querySelector('#small-screen');
 const bigScreen = document.querySelector('#big-screen');
-const popInst = document.querySelector('#pop-inst');
 const percent = document.querySelector('.percent');
-const playOptions = document.querySelectorAll('.options-container>div')
-const computerOptions = document.querySelectorAll(`.computer-options>div`);
-const startGame = () => playOptions.forEach(div => div.addEventListener('click', userOption));
+
 let display = "0";
 let previousNumber = 0;
 let currentNumber = '0';
@@ -20,22 +16,16 @@ let lastOperator = '';
 let parcial = 0;
 let total = 0;
 let maxDigits;
+
 function updateScreens(result) {
-    /* maxDigits = 11; */
     smallScreen.textContent = display;
     bigScreen.textContent = result || currentNumber;
-    console.log(currentNumber)
-    console.log(previousNumber)
-    console.log(parcial)
 }
+
 function operator(sign) {
-    console.log(sign);
-    console.log(display[display.length - 1])
-    console.log(currentNumber)
     previousNumber = parseFloat(currentNumber);
     if (parcial !== 0) {
         parcial = simpleOperation(parcial, parseFloat(currentNumber), lastOperator);
-        console.log(parcial)
     } else {
         parcial = parseFloat(currentNumber);
     }
@@ -44,6 +34,7 @@ function operator(sign) {
     display = parcial.toString() + sign;
     updateScreens()
 }
+
 function decimal() {
     if (currentNumber === '0') {
         currentNumber = '0.';
@@ -52,6 +43,7 @@ function decimal() {
         currentNumber += '.'
     }
 }
+
 function sign() {
     if (currentNumber !== '0') {
         if (!currentNumber.includes('-')) {
@@ -63,6 +55,7 @@ function sign() {
     }
 
 }
+
 function clear() {
     currentNumber = '0';
     previousNumber = '0';
@@ -70,10 +63,12 @@ function clear() {
     display = '0';
     updateScreens();
 }
+
 function partialClear() {
     currentNumber = '0';
     updateScreens();
 }
+
 function equal() {
     total = simpleOperation(parcial, currentNumber, lastOperator);
     parcial = 0;
@@ -81,6 +76,7 @@ function equal() {
     currentNumber = '0';
     updateScreens(total);
 }
+
 function simpleOperation(num1, num2, operator) {
     switch (operator) {
         case '+':
@@ -89,7 +85,7 @@ function simpleOperation(num1, num2, operator) {
             return parseFloat(num1) + parseFloat(num2);
         case '/':
             if (num1 === 0 && num2 === '0') {
-                return 'someone drank too much!'
+                return 'oops!'
             }
             currentNumber = '0';
             previousNumber = '0';
@@ -104,27 +100,18 @@ function simpleOperation(num1, num2, operator) {
             return parseFloat(num1) - parseFloat(num2);
     }
 }
+
 function percentage() {
-    let baseNum = parcial !== 0? parcial : previousNumber;
-    let percent = parseFloat(baseNum) * parseFloat(currentNumber) / 100;
-    console.log(percent)
-    currentNumber = percent.toString();
-    display += currentNumber;
-    currentNumber = 0;
-    parcial += percent;
-    result = percent;
-    updateScreens(percent);
+    if (parcial !== 0 && currentNumber !== '0') {
+        let baseNum = parcial !== 0 ? parcial : previousNumber;
+        let percentResult = parseFloat(baseNum) * parseFloat(currentNumber) / 100;
+        currentNumber = percentResult.toString();
+        display += currentNumber;
+        currentNumber = 0;
+        parcial += percentResult;
+        updateScreens(percentResult);
+    }
 }
-/* function percentage(baseNum, percentage) {
-    let percent = parseFloat(baseNum) * parseFloat(percentage) / 100;
-    console.log(percent)
-    currentNumber = percent.toString();
-    display += currentNumber;
-    currentNumber = 0;
-    parcial += percent;
-    resultado = parcial;
-    updateScreens();
-} */
 
 function nums(num) {
     if (currentNumber === '0') {
@@ -142,7 +129,6 @@ function nums(num) {
     bigScreen.textContent = currentNumber;
 }
 
-/* percent.addEventListener('click', () => percentage(previousNumber, currentNumber)); */
 percent.addEventListener('click', () => percentage());
 equalKey.addEventListener('click', equal);
 decimalKey.addEventListener('click', decimal);
