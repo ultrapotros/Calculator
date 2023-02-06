@@ -89,7 +89,15 @@ function simpleOperation(num1, num2, operator) {
             }
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1) / parseFloat(num2);
+            let eliminateExtraZeros = (parseFloat(num1) / parseFloat(num2)).toFixed(6).toString();
+            for (let i = eliminateExtraZeros.length - 1; i > 2; i--) {
+                if (eliminateExtraZeros[i] === '0' ) {
+                    eliminateExtraZeros = eliminateExtraZeros.slice(0, aux.length-1)
+                } else {
+                    i = 0
+                }
+            }
+            return parseFloat(eliminateExtraZeros);
         case '*':
             currentNumber = '0';
             previousNumber = '0';
