@@ -1,127 +1,139 @@
-const numberButtons = document.querySelectorAll('.operand');
+const numberButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
-const displayContent = document.querySelector('#display');
 const equalKey = document.querySelector('.equals');
 const decimalKey = document.querySelector('.decimal');
-const clearKey = document.querySelector('.clear');
+const clearKey = document.querySelector('#clear');
+const partialClearKey = document.querySelector('#partialClear');
 const signKey = document.querySelector('.sign');
 const smallScreen = document.querySelector('#small-screen');
 const bigScreen = document.querySelector('#big-screen');
-const popInst = document.querySelector('#pop-inst');
 const percent = document.querySelector('.percent');
-const playOptions = document.querySelectorAll('.options-container>div')
-const computerOptions = document.querySelectorAll(`.computer-options>div`);
-const startGame = ()=> playOptions.forEach(div=>div.addEventListener('click',userOption));
-let display="0";
-let previousNumber= 0;
-let currentNumber= '0';
-let lastOperator='';
+
+let display = "0";
+let previousNumber = 0;
+let currentNumber = '0';
+let lastOperator = '';
 let parcial = 0;
 let total = 0;
+let maxDigits;
+
 function updateScreens(result) {
     smallScreen.textContent = display;
     bigScreen.textContent = result || currentNumber;
-    /* bigScreen.textContent = result? result: currentNumber; */
 }
+
 function operator(sign) {
-    console.log(sign);
-    console.log(display[display.length-1])
-    console.log(currentNumber)
-    /* if (currentNumber !== '0') { */
-        previousNumber = parseFloat(currentNumber);
-        if (parcial !== 0) {
-            parcial = simpleOperation(parcial,parseFloat(currentNumber),lastOperator);
-            console.log(parcial)
-        } else{
-            parcial = parseFloat(currentNumber);
-        }
-        lastOperator = sign;
-        currentNumber = '0'
-        display = parcial.toString()+sign ;
-        updateScreens()
-   /*  } */
+    previousNumber = parseFloat(currentNumber);
+    if (parcial !== 0) {
+        parcial = simpleOperation(parcial, parseFloat(currentNumber), lastOperator);
+    } else {
+        parcial = parseFloat(currentNumber);
+    }
+    lastOperator = sign;
+    currentNumber = '0'
+    display = parcial.toString() + sign;
+    updateScreens()
 }
+
 function decimal() {
-    if (!currentNumber.includes('.')) {
+    if (currentNumber === '0') {
+        currentNumber = '0.';
+        maxDigits = 11;
+    } else if (!currentNumber.includes('.')) {
         currentNumber += '.'
     }
-    console.log(parseFloat(currentNumber))
 }
+
 function sign() {
     if (currentNumber !== '0') {
         if (!currentNumber.includes('-')) {
             currentNumber = `-${currentNumber}`
         } else {
-            currentNumber = currentNumber.substring(1,currentNumber.length)
+            currentNumber = currentNumber.substring(1, currentNumber.length)
         }
         updateScreens();
     }
 
 }
+
 function clear() {
     currentNumber = '0';
     previousNumber = '0';
+    parcial = 0;
     display = '0';
     updateScreens();
 }
+
+function partialClear() {
+    currentNumber = '0';
+    updateScreens();
+}
+
 function equal() {
-    total = simpleOperation(parcial,currentNumber,lastOperator);
+    total = simpleOperation(parcial, currentNumber, lastOperator);
     parcial = 0;
     display = '0';
     currentNumber = '0';
     updateScreens(total);
 }
-function simpleOperation(num1,num2,operator) {
-    console.log(num1,num2,operator);
+
+function simpleOperation(num1, num2, operator) {
     switch (operator) {
-        case '+': 
+        case '+':
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1)+parseFloat(num2);
-        case '/': 
-            if (num1 === 0 && num2 ==='0') {/**remember to think about this */
-                console.log('en bug')
-                return 'someone has drunk too much!!'
+            return parseFloat(num1) + parseFloat(num2);
+        case '/':
+            if (num1 === 0 && num2 === '0') {
+                return 'oops!'
             }
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1)/parseFloat(num2);
-        case '*': 
+            return parseFloat(num1) / parseFloat(num2);
+        case '*':
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1)*parseFloat(num2);
-        case '-': 
+            return parseFloat(num1) * parseFloat(num2);
+        case '-':
             currentNumber = '0';
             previousNumber = '0';
-            return parseFloat(num1)-parseFloat(num2);
+            return parseFloat(num1) - parseFloat(num2);
     }
 }
-function percentage(previousNumber,currentNumber) {
-    console.log(previousNumber)
-    console.log(currentNumber)
-    /* currentNumber = simpleOperation(previousNumber,(previousNumber*currentNumber/100),lastOperator); */
-    currentNumber = parseFloat(previousNumber)*parseFloat(currentNumber)/100;
-    display += (currentNumber);
-    updateScreens();
-    console.log(previousNumber*currentNumber/100) ;
-    /* return previousNumber*currentNumber/100; */
+
+function percentage() {
+    if (parcial !== 0 && currentNumber !== '0') {
+        let baseNum = parcial !== 0 ? parcial : previousNumber;
+        let percentResult = parseFloat(baseNum) * parseFloat(currentNumber) / 100;
+        currentNumber = percentResult.toString();
+        display += currentNumber;
+        currentNumber = 0;
+        parcial += percentResult;
+        updateScreens(percentResult);
+    }
 }
 
 function nums(num) {
     if (currentNumber === '0') {
-        currentNumber =num
+        currentNumber = num;
+        maxDigits = 11;
     } else {
-        currentNumber += num;
+        if (maxDigits > 0) {
+            currentNumber += num;
+            maxDigits--;
+        } else {
+            display = "max digits reached"
+            updateScreens();
+        }
     }
-    /* bigScreen.textContent = display; */
-    /* displayContent.removeChild('p') */
     bigScreen.textContent = currentNumber;
-
 }
-percent.addEventListener('click', () => percentage(previousNumber,currentNumber));
+
+percent.addEventListener('click', () => percentage());
 equalKey.addEventListener('click', equal);
 decimalKey.addEventListener('click', decimal);
 signKey.addEventListener('click', sign);
 clearKey.addEventListener('click', clear);
-numberButtons.forEach(button=>button.addEventListener('click', () => nums(button.value)));
-operatorButtons.forEach(button=>button.addEventListener('click', () => operator(button.value)));
+partialClearKey.addEventListener('click', partialClear);
+numberButtons.forEach(button => button.addEventListener('click', () => nums(button.value)));
+operatorButtons.forEach(button => button.addEventListener('click', () => operator(button.value)));
