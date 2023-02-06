@@ -71,7 +71,7 @@ function partialClear() {
 
 function equal() {
     total = simpleOperation(parcial, currentNumber, lastOperator);
-    parcial = 0;
+    parcial = total;
     display = '0';
     currentNumber = '0';
     updateScreens(total);
