@@ -10,7 +10,7 @@ const bigScreen = document.querySelector('#big-screen');
 const percent = document.querySelector('.percent');
 const numbersArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const operatorsArray = ['+', '-', '*', '/'];
-const otherKeysArray = ['Delete', 'Enter', 'Backspace', '%', '='];
+const otherKeysArray = ['Delete', 'Enter', 'Backspace', '%', '=','.'];
 
 let display = "0";
 let previousNumber = 0;
@@ -159,6 +159,9 @@ function filterKeys(key) {
             case '%':
                 percentage();
                 break
+            case '.': 
+                decimal();
+                break
         }
     }
 }
@@ -172,3 +175,4 @@ partialClearKey.addEventListener('click', partialClear);
 numberButtons.forEach(button => button.addEventListener('click', () => nums(button.value)));
 operatorButtons.forEach(button => button.addEventListener('click', () => operator(button.value)));
 document.addEventListener('keydown', (e) => filterKeys(e.key));
+
