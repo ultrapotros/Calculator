@@ -8,6 +8,9 @@ const signKey = document.querySelector('.sign');
 const smallScreen = document.querySelector('#small-screen')
 const bigScreen = document.querySelector('#big-screen');
 const percent = document.querySelector('.percent');
+const numbersArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const operatorsArray = ['+', '-', '*', '/'];
+const otherKeysArray = ['Delete', 'Enter', 'Backspace', '%', '='];
 
 let display = "0";
 let previousNumber = 0;
@@ -24,10 +27,12 @@ function updateScreens(result) {
 
 function operator(sign) {
     previousNumber = parseFloat(currentNumber);
-    if (parcial !== 0) {
-        parcial = simpleOperation(parcial, parseFloat(currentNumber), lastOperator);
-    } else {
-        parcial = parseFloat(currentNumber);
+    if (lastOperator !== '=') {
+        if (parcial !== 0) {
+            parcial = simpleOperation(parcial, previousNumber, lastOperator);
+        } else {
+            parcial = parseFloat(currentNumber);
+        }
     }
     lastOperator = sign;
     currentNumber = '0'
@@ -47,18 +52,18 @@ function decimal() {
 function sign() {
     if (currentNumber !== '0') {
         if (!currentNumber.includes('-')) {
-            currentNumber = `-${currentNumber}`
+            currentNumber = `-${currentNumber}`;
         } else {
-            currentNumber = currentNumber.substring(1, currentNumber.length)
+            currentNumber = currentNumber.substring(1, currentNumber.length);
         }
         updateScreens();
     }
-
 }
 
 function clear() {
+    lastOperator = '';
     currentNumber = '0';
-    previousNumber = '0';
+    previousNumber = 0;
     parcial = 0;
     display = '0';
     updateScreens();
@@ -71,6 +76,7 @@ function partialClear() {
 
 function equal() {
     total = simpleOperation(parcial, currentNumber, lastOperator);
+    lastOperator = '=';
     parcial = total;
     display = '0';
     currentNumber = '0';
@@ -78,33 +84,27 @@ function equal() {
 }
 
 function simpleOperation(num1, num2, operator) {
+    currentNumber = '0';
+    previousNumber = 0;
     switch (operator) {
         case '+':
-            currentNumber = '0';
-            previousNumber = '0';
             return parseFloat(num1) + parseFloat(num2);
         case '/':
-            if (num1 === 0 && num2 === '0') {
-                return 'oops!'
+            if (num1 === 0 && num2 === 0) {
+                return 'oops!';
             }
-            currentNumber = '0';
-            previousNumber = '0';
             let eliminateExtraZeros = (parseFloat(num1) / parseFloat(num2)).toFixed(6).toString();
             for (let i = eliminateExtraZeros.length - 1; i > 2; i--) {
-                if (eliminateExtraZeros[i] === '0' ) {
-                    eliminateExtraZeros = eliminateExtraZeros.slice(0, eliminateExtraZeros.length-1)
+                if (eliminateExtraZeros[i] === '0') {
+                    eliminateExtraZeros = eliminateExtraZeros.slice(0, eliminateExtraZeros.length - 1);
                 } else {
-                    i = 0
+                    i = 0;
                 }
             }
             return parseFloat(eliminateExtraZeros);
         case '*':
-            currentNumber = '0';
-            previousNumber = '0';
             return parseFloat(num1) * parseFloat(num2);
         case '-':
-            currentNumber = '0';
-            previousNumber = '0';
             return parseFloat(num1) - parseFloat(num2);
     }
 }
@@ -115,13 +115,18 @@ function percentage() {
         let percentResult = parseFloat(baseNum) * parseFloat(currentNumber) / 100;
         currentNumber = percentResult.toString();
         display += currentNumber;
-        currentNumber = 0;
+        currentNumber = '0';
         parcial += percentResult;
         updateScreens(percentResult);
     }
 }
 
 function nums(num) {
+    if (lastOperator === '=') {
+        parcial = 0;
+        currentNumber = '0';
+        lastOperator = '';
+    }
     if (currentNumber === '0') {
         currentNumber = num;
         maxDigits = 11;
@@ -130,11 +135,32 @@ function nums(num) {
             currentNumber += num;
             maxDigits--;
         } else {
-            display = "max digits reached"
+            display = "max digits reached";
             updateScreens();
         }
     }
     bigScreen.textContent = currentNumber;
+}
+
+function filterKeys(key) {
+    if (numbersArray.includes(key)) nums(key);
+    if (operatorsArray.includes(key)) operator(key);
+    if (otherKeysArray.includes(key)) {
+        switch (key) {
+            case 'Delete':
+                clear();
+                break
+            case 'Backspace':
+                partialClear();
+                break
+            case 'Enter' || '=':
+                equal();
+                break
+            case '%':
+                percentage();
+                break
+        }
+    }
 }
 
 percent.addEventListener('click', () => percentage());
@@ -145,3 +171,4 @@ clearKey.addEventListener('click', clear);
 partialClearKey.addEventListener('click', partialClear);
 numberButtons.forEach(button => button.addEventListener('click', () => nums(button.value)));
 operatorButtons.forEach(button => button.addEventListener('click', () => operator(button.value)));
+document.addEventListener('keydown', (e) => filterKeys(e.key));
